@@ -1389,3 +1389,36 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     box-shadow: 0 0 0 3px rgba(244, 163, 0, 0.15);
 }
 .form-group textarea { resize: vertical; }
+
+
+
+/* ========== Back to Top Button ========== */
+.back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--gradient-accent);
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(244, 163, 0, 0.4);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 99;
+    border: none;
+}
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(244, 163, 0, 0.55);
+}

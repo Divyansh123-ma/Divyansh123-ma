@@ -5,7 +5,6 @@ if (mobileToggle && navLinks) {
     mobileToggle.addEventListener('click', () => {
         navLinks.classList.toggle('open');
     });
-    // Close menu when clicking a link
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => navLinks.classList.remove('open'));
     });
@@ -19,9 +18,8 @@ function updateCountdown() {
     const cdMins = document.getElementById('cd-mins');
     const cdSecs = document.getElementById('cd-secs');
 
-    // Target: 14 June of current year (or next year if past)
     const now = new Date();
-    let target = new Date(now.getFullYear(), 5, 14, 23, 59, 59); // Month 5 = June
+    let target = new Date(now.getFullYear(), 5, 14, 23, 59, 59); // June 14
     if (target < now) {
         target = new Date(now.getFullYear() + 1, 5, 14, 23, 59, 59);
     }
@@ -53,9 +51,7 @@ document.querySelectorAll('.faq-q').forEach(q => {
     q.addEventListener('click', () => {
         const item = q.closest('.faq-item');
         const isOpen = item.classList.contains('open');
-        // Close all
         document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-        // Open clicked if it was closed
         if (!isOpen) item.classList.add('open');
     });
 });
@@ -75,6 +71,33 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// ============== Active Nav Link on Scroll (Scroll Spy) ==============
+const sections = document.querySelectorAll('section[id]');
+const navLinkElems = document.querySelectorAll('.nav-links a[href^="#"]');
+
+function updateActiveNav() {
+    const scrollY = window.pageYOffset;
+    let currentId = '';
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        const sectionHeight = section.offsetHeight;
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+            currentId = section.getAttribute('id');
+        }
+    });
+
+    navLinkElems.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === `#${currentId}` && !link.classList.contains('btn-nav')) {
+            link.classList.add('active');
+        }
+    });
+}
+window.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
+
 // ============== Contact Form Handler ==============
 function handleContactForm(event) {
     event.preventDefault();
@@ -90,7 +113,7 @@ function handleContactForm(event) {
     }, 2500);
 }
 
-// ============== Reveal on Scroll (subtle) ==============
+// ============== Reveal on Scroll ==============
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -100,9 +123,28 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.highlight-card, .stage-card, .syl-card, .timeline-item, .news-list-item, .step-row, .elig-card').forEach(el => {
+document.querySelectorAll('.highlight-card, .stage-card, .syl-card, .timeline-item, .news-list-item, .step-row, .elig-card, .exam-card, .news-detail-card').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(el);
+});
+
+// ============== Back to Top Button ==============
+const backToTop = document.createElement('button');
+backToTop.className = 'back-to-top';
+backToTop.innerHTML = '↑';
+backToTop.setAttribute('aria-label', 'Back to top');
+document.body.appendChild(backToTop);
+
+window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 400) {
+        backToTop.classList.add('visible');
+    } else {
+        backToTop.classList.remove('visible');
+    }
+});
+
+backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 });
